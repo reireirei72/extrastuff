@@ -26,7 +26,7 @@ fetch(url)
                 return cell;
             });
         }
-        console.log(table);
+        document.getElementById('ok').classList.remove('disabled');
     });
 
 document.getElementById('ok').addEventListener('click', () => {
@@ -36,12 +36,20 @@ document.getElementById('ok').addEventListener('click', () => {
 
     let age = parseInt(ageInput.value.replace(',', '.'));
     if (isNaN(age)) {
-        resultDiv.innerText = `Некорректный возраст ('${ageInput.value}' лун)`;
+        if (ageInput.value === '') {
+            resultDiv.innerText = `Вы не ввели возраст`;
+        } else {
+            resultDiv.innerText = `Некорректный возраст ('${ageInput.value}' лун)`;
+        }
         return;
     }
     let trauma = parseInt(traumaInput.value.replace(',', '.'));
     if (isNaN(trauma)) {
-        resultDiv.innerText = `Некорректный процент здоровья ('${traumaInput.value}%')`;
+        if (traumaInput.value === '') {
+            resultDiv.innerText = `Вы не ввели количество здоровья`;
+        } else {
+            resultDiv.innerText = `Некорректный процент здоровья ('${traumaInput.value}%')`;
+        }
         return;
     }
 
@@ -51,7 +59,7 @@ document.getElementById('ok').addEventListener('click', () => {
 
     const result = table[age];
     if (result === undefined) {
-        resultDiv.innerText = `Какой-то сложный возраст ('${age}' лун)`;
+        resultDiv.innerText = `Какой-то сложный возраст ('${age}' лун). Позвоните Тису`;
         return;
     }
     for (let i = 0; i < result.length; i++) {
@@ -80,12 +88,12 @@ document.getElementById('ok').addEventListener('click', () => {
     for (let i = 0; i < result.length; i++) {
         const now = result[i];
         if (now * 100 * maxAmount > trauma) {
-            let hours = i * 0.25 * 24;
+            let hours = (i + 1) * 0.25 * 24;
             const days = Math.floor(hours / 24);
             hours -= days * 24;
-            const time = (days > 0 ? `${days} ${declination(days, ['дня', 'дней', 'дней'])} ` : ``) + `${hours} часов`;
+            const time = (days > 0 ? `${days} ${declination(days, ['день', 'дня', 'дней'])} ` : ``) + `${hours} часов`;
             const amount = Math.ceil(trauma / (now * 100));
-            resultDiv.innerHTML = `Для ${age} ${declination(age, ['луны', 'лун', 'лун'])} с ${trauma}% ушибов (${100 - trauma}% здоровья) носить нужно <b>${amount}</b> костоправ${declination(amount, ['', 'а', 'ов'])} в течение <b>${time}</b>`;
+            resultDiv.innerHTML = `Для лечения ${trauma}% ушибов (${100 - trauma}% здоровья) в ${age} ${declination(age, ['луны', 'лун', 'лун'])} нужно надеть <b>${amount}</b> костоправ${declination(amount, ['', 'а', 'ов'])} и носить <b>${time}</b>`;
             break;
         }
     }

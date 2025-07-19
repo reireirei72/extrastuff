@@ -23,3 +23,7 @@ body {
     background-color: #014f69;
     border-color: #054e66;
 }
+.btn.disabled, .btn:disabled, fieldset:disabled .btn {
+    background-color: #498a9e;
+    border-color: #498a9e;
+}
