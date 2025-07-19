@@ -36,12 +36,12 @@ document.getElementById('ok').addEventListener('click', () => {
 
     let age = parseInt(ageInput.value.replace(',', '.'));
     if (isNaN(age)) {
-        resultDiv.innerText = `Некорректный возраст (${ageInput.value} лун)`;
+        resultDiv.innerText = `Некорректный возраст ('${ageInput.value}' лун)`;
         return;
     }
     let trauma = parseInt(traumaInput.value.replace(',', '.'));
     if (isNaN(trauma)) {
-        resultDiv.innerText = `Некорректный процент здоровья (${traumaInput.value}%)`;
+        resultDiv.innerText = `Некорректный процент здоровья ('${traumaInput.value}%')`;
         return;
     }
 
@@ -51,7 +51,7 @@ document.getElementById('ok').addEventListener('click', () => {
 
     const result = table[age];
     if (result === undefined) {
-        resultDiv.innerText = `Какой-то сложный возраст (${age} лун)`;
+        resultDiv.innerText = `Какой-то сложный возраст ('${age}' лун)`;
         return;
     }
     for (let i = 0; i < result.length; i++) {
@@ -73,21 +73,26 @@ document.getElementById('ok').addEventListener('click', () => {
         }
     }
     let maxAmount = 1;
-    if (age >= 6) maxAmount = 2;
-    if (age >= 12) maxAmount = 3;
-    if (age >= 50) maxAmount = 4;
+    if (age >= 6)   maxAmount = 2;
+    if (age >= 12)  maxAmount = 3;
+    if (age >= 50)  maxAmount = 4;
     if (age >= 200) maxAmount = 5;
     for (let i = 0; i < result.length; i++) {
         const now = result[i];
         if (now * 100 * maxAmount > trauma) {
             let hours = i * 0.25 * 24;
-            let days = Math.floor(hours / 24);
+            const days = Math.floor(hours / 24);
             hours -= days * 24;
-            const time = (days > 0 ? `${days} дней ` : ``) + `${hours} часов`;
+            const time = (days > 0 ? `${days} ${declination(days, ['дня', 'дней', 'дней'])} ` : ``) + `${hours} часов`;
             const amount = Math.ceil(trauma / (now * 100));
-            resultDiv.innerHTML = `Для ${age} лун с ${trauma}% ушибов (${100 - trauma}% здоровья) носить нужно <b>${amount}</b> костоправов в течение <b>${time}</b>`;
+            resultDiv.innerHTML = `Для ${age} ${declination(age, ['луны', 'лун', 'лун'])} с ${trauma}% ушибов (${100 - trauma}% здоровья) носить нужно <b>${amount}</b> костоправ${declination(amount, ['', 'а', 'ов'])} в течение <b>${time}</b>`;
             break;
         }
     }
-
 });
+const declination = (count, types) => {
+    const cases = [2, 0, 1, 1, 1, 2];
+    let typeNum = (count % 100 > 4 && count % 100 < 20) ? 2 : cases[Math.min(count % 10, 5)];
+    if (Math.floor(count) != count) typeNum = 1;
+    return types[typeNum];
+};
