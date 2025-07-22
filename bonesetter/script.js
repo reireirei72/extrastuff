@@ -53,6 +53,7 @@ document.getElementById('ok').addEventListener('click', () => {
         return;
     }
 
+    const realAge = age;
     age = Math.max(5, Math.min(275, age));
     trauma = 100 - trauma;
     trauma = Math.max(1, Math.min(100, trauma));
@@ -85,24 +86,42 @@ document.getElementById('ok').addEventListener('click', () => {
     if (age >= 12)  maxAmount = 3;
     if (age >= 50)  maxAmount = 4;
     if (age >= 200) maxAmount = 5;
+    const formatString = (hours, health) => {
+        const days = Math.floor(hours / 24);
+        hours -= days * 24;
+        const time = (days > 0 ? `${days} ${declination(days, ['день', 'дня', 'дней'])} ` : ``) + `${hours} часов`;
+        const amount = Math.ceil(trauma / (health * 100));
+        const date = new Date();
+        date.setHours(date.getHours() + hours + days * 24);
+        const dDay = String(date.getDate()).padStart(2, '0');
+        const dMonth = String(date.getMonth() + 1).padStart(2, '0'); // months are 0-based
+        const dHours = String(date.getHours()).padStart(2, '0');
+        const dMinutes = String(date.getMinutes()).padStart(2, '0');
+        return {
+            bsAmount: amount,
+            time,
+            dTime: `${dDay}.${dMonth} в ${dHours}:${dMinutes}`,
+        };
+    }
+    let biggest = 0;
+    let biggestHours = 6;
+    resultDiv.innerHTML = `Для лечения ${trauma}% ушибов (${100 - trauma}% здоровья) в ${realAge} ${declination(realAge, ['луны', 'луны', 'лун'])} нужно надеть `;
     for (let i = 0; i < result.length; i++) {
         const now = result[i];
+        let hours = (i + 1) * 0.25 * 24;
         if (now * 100 * maxAmount > trauma) {
-            let hours = (i + 1) * 0.25 * 24;
-            const days = Math.floor(hours / 24);
-            hours -= days * 24;
-            const time = (days > 0 ? `${days} ${declination(days, ['день', 'дня', 'дней'])} ` : ``) + `${hours} часов`;
-            const amount = Math.ceil(trauma / (now * 100));
-            const date = new Date();
-            date.setHours(date.getHours() + hours + days * 24);
-            const dDay = String(date.getDate()).padStart(2, '0');
-            const dMonth = String(date.getMonth() + 1).padStart(2, '0'); // months are 0-based
-            const dHours = String(date.getHours()).padStart(2, '0');
-            const dMinutes = String(date.getMinutes()).padStart(2, '0');
-            resultDiv.innerHTML = `Для лечения ${trauma}% ушибов (${100 - trauma}% здоровья) в ${age} ${declination(age, ['луны', 'лун', 'лун'])} нужно надеть <b>${amount}</b> костоправ${declination(amount, ['', 'а', 'ов'])} и носить <b>${time}</b> (если надеть сейчас, снимать надо <b>${dDay}.${dMonth} в ${dHours}:${dMinutes}</b>)`;
-            break;
+            const data = formatString(hours, now);
+            resultDiv.innerHTML += `<b>${data.bsAmount}</b> костоправ${declination(data.bsAmount, ['', 'а', 'ов'])} и носить <b>${data.time}</b> (если надеть сейчас, снимать надо <b>${data.dTime}</b>)`;
+            return;
+        }
+        if (now > biggest) {
+            biggest = now;
+            biggestHours = hours;
         }
     }
+    let hours = biggestHours;
+    const data = formatString(hours, biggest);
+    resultDiv.innerHTML = `<b>${data.bsAmount}</b> костоправ${declination(data.bsAmount, ['', 'а', 'ов'])} и носить <b>${data.time}</b> (если надеть сейчас, снимать надо <b>${data.dTime}</b>)<br>Лечение будет неполным! Вы слишком маленьковый для такого. <u><b>Вылечится ${biggest * 100}% здоровья.</b></u>`;
 });
 const declination = (count, types) => {
     const cases = [2, 0, 1, 1, 1, 2];
