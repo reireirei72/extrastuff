@@ -93,7 +93,13 @@ document.getElementById('ok').addEventListener('click', () => {
             hours -= days * 24;
             const time = (days > 0 ? `${days} ${declination(days, ['день', 'дня', 'дней'])} ` : ``) + `${hours} часов`;
             const amount = Math.ceil(trauma / (now * 100));
-            resultDiv.innerHTML = `Для лечения ${trauma}% ушибов (${100 - trauma}% здоровья) в ${age} ${declination(age, ['луны', 'лун', 'лун'])} нужно надеть <b>${amount}</b> костоправ${declination(amount, ['', 'а', 'ов'])} и носить <b>${time}</b>`;
+            const date = new Date();
+            date.setHours(date.getHours() + hours + days * 24);
+            const dDay = String(date.getDate()).padStart(2, '0');
+            const dMonth = String(date.getMonth() + 1).padStart(2, '0'); // months are 0-based
+            const dHours = String(date.getHours()).padStart(2, '0');
+            const dMinutes = String(date.getMinutes()).padStart(2, '0');
+            resultDiv.innerHTML = `Для лечения ${trauma}% ушибов (${100 - trauma}% здоровья) в ${age} ${declination(age, ['луны', 'лун', 'лун'])} нужно надеть <b>${amount}</b> костоправ${declination(amount, ['', 'а', 'ов'])} и носить <b>${time}</b> (если надеть сейчас, снимать надо <b>${dDay}.${dMonth} в ${dHours}:${dMinutes}</b>)`;
             break;
         }
     }
