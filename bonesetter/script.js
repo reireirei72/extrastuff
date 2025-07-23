@@ -69,13 +69,9 @@ document.getElementById('ok').addEventListener('click', () => {
             let replacement = null;
             while (replacement === null && k < 270) {
                 k++;
-                const check = table[age - k];
+                const check = table[age + k];
                 if (check !== undefined && check[i] !== null) {
                     replacement = check[i];
-                }
-                const check2 = table[age + k];
-                if (check2 !== undefined && check2[i] !== null) {
-                    replacement = check2[i];
                 }
             }
             result[i] = replacement;
@@ -94,7 +90,7 @@ document.getElementById('ok').addEventListener('click', () => {
         const date = new Date();
         date.setHours(date.getHours() + hours + days * 24);
         const dDay = String(date.getDate()).padStart(2, '0');
-        const dMonth = String(date.getMonth() + 1).padStart(2, '0'); // months are 0-based
+        const dMonth = String(date.getMonth() + 1).padStart(2, '0');
         const dHours = String(date.getHours()).padStart(2, '0');
         const dMinutes = String(date.getMinutes()).padStart(2, '0');
         return {
