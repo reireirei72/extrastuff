@@ -117,7 +117,7 @@ document.getElementById('ok').addEventListener('click', () => {
     }
     let hours = biggestHours;
     const data = formatString(hours, biggest);
-    resultDiv.innerHTML = `<b>${data.bsAmount}</b> костоправ${declination(data.bsAmount, ['', 'а', 'ов'])} и носить <b>${data.time}</b> (если надеть сейчас, снимать надо <b>${data.dTime}</b>)<br>Лечение будет неполным! Вы слишком маленьковый для такого. <u><b>Вылечится ${biggest * 100 * maxAmount}% здоровья.</b></u>`;
+    resultDiv.innerHTML += `<b>${data.bsAmount}</b> костоправ${declination(data.bsAmount, ['', 'а', 'ов'])} и носить <b>${data.time}</b> (если надеть сейчас, снимать надо <b>${data.dTime}</b>)<br>В таком возрасте можно надеть только 1 костоправ, поэтому вы вылечитесь не полностью. <u><b>Вылечится ${biggest * 100 * maxAmount}% здоровья.</b></u>`;
 });
 const declination = (count, types) => {
     const cases = [2, 0, 1, 1, 1, 2];
