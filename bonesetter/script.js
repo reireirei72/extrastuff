@@ -28,9 +28,23 @@ fetch(url)
         }
         document.getElementById('ok').classList.remove('disabled');
     });
-
+document.getElementById('moons').addEventListener('input', () => {
+    const ageInput = document.getElementById('moons');
+    const weightInput = document.getElementById('weight');
+    let age = parseInt(ageInput.value.replace(',', '.'));
+    if (isNaN(age)) {
+        return;
+    }
+    let maxAmount = 1;
+    if (age >= 6)   maxAmount = 2;
+    if (age >= 12)  maxAmount = 3;
+    if (age >= 50)  maxAmount = 4;
+    if (age >= 200) maxAmount = 5;
+    weightInput.value = maxAmount;
+});
 document.getElementById('ok').addEventListener('click', () => {
     const ageInput = document.getElementById('moons');
+    const weightInput = document.getElementById('weight');
     const traumaInput = document.getElementById('trauma');
     const resultDiv = document.getElementById('result');
 
@@ -49,6 +63,15 @@ document.getElementById('ok').addEventListener('click', () => {
             resultDiv.innerText = `Вы не ввели количество здоровья`;
         } else {
             resultDiv.innerText = `Некорректный процент здоровья ('${traumaInput.value}%')`;
+        }
+        return;
+    }
+    let maxAmount = parseInt(weightInput.value.replace(',', '.'));
+    if (isNaN(maxAmount)) {
+        if (weightInput.value === '') {
+            resultDiv.innerText = `Вы не ввели максимальное доступное количество базовых мест`;
+        } else {
+            resultDiv.innerText = `Некорректное значение базовых мест ('${weightInput.value}%')`;
         }
         return;
     }
@@ -77,11 +100,6 @@ document.getElementById('ok').addEventListener('click', () => {
             result[i] = replacement;
         }
     }
-    let maxAmount = 1;
-    if (age >= 6)   maxAmount = 2;
-    if (age >= 12)  maxAmount = 3;
-    if (age >= 50)  maxAmount = 4;
-    if (age >= 200) maxAmount = 5;
     const formatString = (hours, health) => {
         const days = Math.floor(hours / 24);
         hours -= days * 24;
@@ -101,7 +119,7 @@ document.getElementById('ok').addEventListener('click', () => {
     }
     let biggest = 0;
     let biggestHours = 6;
-    resultDiv.innerHTML = `Для лечения ${trauma}% ушибов (${100 - trauma}% здоровья) в ${realAge} ${declination(realAge, ['луны', 'луны', 'лун'])} нужно надеть `;
+    resultDiv.innerHTML = `Для лечения ${trauma}% ушибов (${100 - trauma}% здоровья) в ${realAge} ${declination(realAge, ['луны', 'луны', 'лун'])} (${maxAmount} ${declination(maxAmount, ['место', 'места', 'мест'])} во рту) нужно надеть `;
     for (let i = 0; i < result.length; i++) {
         const now = result[i];
         let hours = (i + 1) * 0.25 * 24;
