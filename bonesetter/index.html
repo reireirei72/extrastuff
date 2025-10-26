@@ -15,26 +15,38 @@
                     <h5 class="card-title">Считалка костоправов</h5>
                     <div class="card-text">
                         <div class="container">
-                            <div class="row">
+                            <div class="row mb-2">
                                 <div class="col">
                                     Мне
                                     <input class="form-control d-inline-block mx-2" type="number" min="0" max="285" step="1" id="moons">
                                     лун
                                 </div>
                             </div>
-                            <div class="row mt-2">
+                            <div class="row mb-2">
+                                <div class="col">
+                                    У меня
+                                    <input class="form-control d-inline-block mx-2" type="number" min="1" max="999" step="1" id="weight">
+                                    макс. базовых мест
+                                </div>
+                            </div>
+                            <div class="row mb-2">
                                 <div class="col">
                                     У меня
                                     <input class="form-control d-inline-block mx-2" type="number" min="1" max="99" step="1" id="trauma">
                                     % здоровья (только ушибы)
                                 </div>
                             </div>
-                            <div class="row mt-2">
+                            <div class="row mb-2">
                                 <div class="col">
                                     <button class="btn btn-success disabled" id="ok">Посчитать</button>
                                 </div>
                             </div>
-                            <div class="row mt-2">
+                            <div class="row mb-2">
+                                <div class="col">
+                                    <small><i>Редактируйте кол-во базовых мест только в случае, если у вас есть предмет на места!</i></small>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
                                 <div class="col">
                                     <div id="result"></div>
                                 </div>
